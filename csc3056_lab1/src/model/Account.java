@@ -17,6 +17,11 @@ public class Account {
 		this.account_type = account_type;
 		this.account_opening_date = account_opening_date;
 	}
+	
+	public String toString() {
+		return account_number + ", " + username_of_account_holder + ", " + account_type + ", " + account_opening_date;
+	}
+	
 	public String getAccount_number() {
 		return account_number;
 	}

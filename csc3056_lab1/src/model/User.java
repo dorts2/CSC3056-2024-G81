@@ -5,15 +5,19 @@ public class User {
 	private String password;
 	private String first_name;
 	private String last_name;
-	private String mobileNumber;
+	private String mobile_number;
 	
-	public User(String username, String password, String first_name, String last_name, String mobileNumber) {
+	public User(String username, String password, String first_name, String last_name, String mobile_number) {
 		super();
 		this.username = username;
 		this.password = password;
 		this.first_name = first_name;
 		this.last_name = last_name;
-		this.mobileNumber = mobileNumber;
+		this.mobile_number = mobile_number;
+	}
+	
+	public String toString() {
+		return username + ", " + password + ", " + first_name + ", " + last_name + ", " + mobile_number;
 	}
 	
 	public String getUsername() {
@@ -40,10 +44,10 @@ public class User {
 	public void setLast_name(String last_name) {
 		this.last_name = last_name;
 	}
-	public String getMobileNumber() {
-		return mobileNumber;
+	public String getMobile_number() {
+		return mobile_number;
 	}
-	public void setMobileNumber(String mobileNumber) {
-		this.mobileNumber = mobileNumber;
+	public void setMobile_number(String mobile_number) {
+		this.mobile_number = mobile_number;
 	}
 }
