@@ -12,7 +12,7 @@ public class UserTest {
 		String test_first_name = "Mike";
 		String test_last_name = "Smith";
 		String test_mobile_number = "07771234567";
-		
+				
 		User testUser = new User(test_username, test_password, test_first_name, test_last_name, test_mobile_number);
 		
 		if (testUser.getUsername() != test_username)
