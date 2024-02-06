@@ -15,7 +15,7 @@ public class UserTest {
 		
 		User testUser = new User(test_username, test_password, test_first_name, test_last_name, test_mobile_number);
 		
-		if (testUser.getUsername() == test_username)
+		if (testUser.getUsername() != test_username)
 			System.out.println(TestUtils.TEXT_COLOR_GREEN + "TestConstructor-TC1 passed" + TestUtils.TEXT_COLOR_RESET);
 		else
 			System.out.println(TestUtils.TEXT_COLOR_RED + "TestConstructor-TC1 failed: username did not match" + TestUtils.TEXT_COLOR_RESET);
@@ -41,8 +41,12 @@ public class UserTest {
 			System.out.println(TestUtils.TEXT_COLOR_RED + "TestConstructor-TC5 failed: mobile number did not match" + TestUtils.TEXT_COLOR_RESET);
 	}
 	
+		
+	
+	
 	public static void main(String[] args) {
 		testUserConstructor();
 	}
+	
 
 }
