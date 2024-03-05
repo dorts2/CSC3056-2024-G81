@@ -27,6 +27,7 @@ public class RangeTest {
 //				0, rangeObjectUnderTest.getCentralValue(), 0.000000001d);
 //	}
 	
+	
 	// getLowerBound()
 	
 	@Test
@@ -70,6 +71,7 @@ public class RangeTest {
 		assertEquals("The lower bound value of 0 and 5.75 should be 0",
 				0, r6.getLowerBound(), 0.0000001d);
 	}
+	
 	
 	// getUpperBound()
 	
@@ -115,74 +117,90 @@ public class RangeTest {
 				0, r12.getUpperBound(), 0.0000001d);
 	}
 	
-	// getLength()
+	
+	// expandToInclude()
 	
 	@Test
-	public void testGetLengthOneNegativeOnePositive() {
-		Range r13 = new Range(-3.5,3.5);
-		assertEquals("The length of the range -3.5 to 3.5 should be 7",
-				7, r13.getLength(), 0.0000001d);
+	public void testExpandToIncludeWithNullRange() {
+		Range r13 = Range.expandToInclude(null, 4);
+		assertEquals("Expected range to be 4 to 4",
+				new Range(4,4), r13);
+	}
+		
+	@Test
+	public void testExpandToIncludeValueInsideRange() {
+		Range r14 = Range.expandToInclude(new Range(1.345,6.789), 3.126);
+		assertEquals("Expected range to be 1.345 to 6.789",
+				new Range(1.345,6.789), r14);
+	}
+		
+	@Test
+	public void testExpandToIncludeValueBelowRange() {
+		Range r15 = Range.expandToInclude(new Range(0.0,8.6), -3.2);
+		assertEquals("Expected range to be -3.2 to 8.6",
+				new Range(-3.2,8.6), r15);
+	}
+		
+	@Test
+	public void testExpandToIncludeValueAboveRange() {
+		Range r16 = Range.expandToInclude(new Range(8.88,14.14), 19.19);
+		assertEquals("Expected range to be 8.88 to 19.19",
+				new Range(8.88,19.19), r16);
+	}
+		
+	@Test
+	public void testExpandToIncludeValueEqualsLowerBound() {
+		Range r17 = Range.expandToInclude(new Range(1.1,7), 1.1);
+		assertEquals("Expected range to be 1.1 to 7",
+				new Range(1.1,7), r17);
+	}
+		
+	@Test
+	public void testExpandToIncludeValueEqualsUpperBound() {
+		Range r18 = Range.expandToInclude(new Range(-3,6.8), 6.8);
+		assertEquals("Expected range to be -3 to 6.8",
+				new Range(-3,6.8), r18);
+	}
+	
+	
+	// constrain
+	
+	@Test
+	public void testConstrainsValueOnLowerBoundary() {
+		assertEquals("The closest value to -3.5 in the range (-3.5,3.5) is -3.5",
+				-3.5, rangeObjectUnderTest.constrain(-3.5), 0.0000001d);
 	}
 	
 	@Test
-	public void testGetLengthBothPositiveAndEqual() {
-		Range r14 = new Range(5.0003,5.0003);
-		assertEquals("The length of the range 5.0003 to 5.0003 should be 0",
-				0, r14.getLength(), 0.0000001d);
+	public void testConstrainsValueOnUpperBoundary() {
+		assertEquals("The closest value to 3.5 in the range (-3.5,3.5) is 3.5",
+				3.5, rangeObjectUnderTest.constrain(3.5), 0.0000001d);
 	}
 	
 	@Test
-	public void testGetLengthBothPositiveAndNotEqual() {
-		Range r15 = new Range(2.2,4.4);
-		assertEquals("The length of the range 2.2 to 4.4 should be 2.2",
-				2.2, r15.getLength(), 0.0000001d);
+	public void testConstrainPositiveValueInsideTheRange() {
+		assertEquals("The closest value to 0.5 in the range (-3.5,3.5) is 0.5",
+				0.5, rangeObjectUnderTest.constrain(0.5), 0.0000001d);
 	}
 	
 	@Test
-	public void testGetLengthBothNegativeAndEqual() {
-		Range r16 = new Range(-4.0004,-4.0004);
-		assertEquals("The length of the range -4.0004 to -4.0004 should be 0",
-				0, r16.getLength(), 0.0000001d);
+	public void testConstrainNegativeValueInsideTheRange() {
+		assertEquals("The closest value to -1.234 in the range (-3.5,3.5) is -1.234",
+				-1.234, rangeObjectUnderTest.constrain(-1.234), 0.0000001d);
 	}
 	
 	@Test
-	public void testGetLengthBothNegativeAndNotEqual() {
-		Range r17 = new Range(-7.75,-2.25);
-		assertEquals("The length of the range -7.75 to -2.25 should be 5.5",
-				5.5, r17.getLength(), 0.0000001d);
-	}
-	
-	// contains()
-	
-	@Test
-	public void testContainsValueAtLowerBound() {
-		assertEquals("The range does contain the value -3.5",
-				true, rangeObjectUnderTest.contains(-3.5));
+	public void testConstrainValueOutsideRangeBelowLowerBoundary() {
+		assertEquals("The closest value to -4.1 in the range (-3.5,3.5) is -3.5",
+				-3.5, rangeObjectUnderTest.constrain(-4.1), 0.0000001d);
 	}
 	
 	@Test
-	public void testContainsValueAtUpperBound() {
-		assertEquals("The range does contain the value 3.5",
-				true, rangeObjectUnderTest.contains(3.5));
+	public void testConstrainValueOutsideRangeAboveUpperBoundary() {
+		assertEquals("The closest value to 4.6 in the range (-3.5,3.5) is 3.5",
+				3.5, rangeObjectUnderTest.constrain(4.6), 0.0000001d);
 	}
 	
-	@Test
-	public void testContainsValueInMiddleOfRange() {
-		assertEquals("The range does contain the value 0.5",
-				true, rangeObjectUnderTest.contains(0.5));
-	}
-	
-	@Test
-	public void testContainsValueOutsideLowerBound() {
-		assertEquals("The range does not contain the value -4.1",
-				false, rangeObjectUnderTest.contains(-4.1));
-	}
-	
-	@Test
-	public void testContainsValueOutsideUpperBound() {
-		assertEquals("The range does not contain the value 4.6",
-				false, rangeObjectUnderTest.contains(4.6));
-	}
 	
 	// intersects()
 
@@ -191,13 +209,13 @@ public class RangeTest {
 		assertEquals("The range (1,5) does intersect with range (-3,3)",
 				true, rangeObjectUnderTest.intersects(1, 5));
 	}
-	
+		
 	@Test
 	public void testIntersectsBothValuesNegativePartiallyOverlapOnLowerBoundary() {
 		assertEquals("The range (-6,-2) does intersect with range (-3,3)",
 				true, rangeObjectUnderTest.intersects(-6, -2));
 	}
-	
+		
 	@Test
 	public void testIntersectsOnePositiveOneNegativeInsideTheRange() {
 		assertEquals("The range (-1.1,1.1) does intersect with range (-3,3)",
@@ -209,23 +227,23 @@ public class RangeTest {
 		assertEquals("The range (-4.245,4.894) does intersect with range (-3,3)",
 				true, rangeObjectUnderTest.intersects(-4.245, 4.894));
 	}
-	
+		
 	@Test
 	public void testIntersectsBothValuesNegativeAndOutsideRangeOnLowerBoundary() {
 		assertEquals("The range (-8,-5.44) does not intersect with range (-3,3)",
 				false, rangeObjectUnderTest.intersects(-8, -5.44));
 	}
-	
+		
 	@Test
 	public void testIntersectsBothValuesPositiveAndOutsideRangeOnUpperBoundary() {
 		assertEquals("The range (4.2,6.3) does not intersect with range (-3.5,3.5)",
 				false, rangeObjectUnderTest.intersects(4.2, 6.3));
 	}
-	
+		
 	@Test
 	public void testIntersectsValuesSameAsRange() {
 		assertEquals("The range (-3.5,3.5) does intersect with range (-3.5,3.5)",
 				true, rangeObjectUnderTest.intersects(-3.5, 3.5));
 	}
-
+	
 }
