@@ -260,7 +260,7 @@ public class DataUtilitiesTest {
 	}
 	
 	@Test
-	public void testCreateNumberArray2DSWithLargeValues() {
+	public void testCreateNumberArray2DWithLargeValues() {
 		double[][] data = new double[][] {{2000.0,8000.0},{1000.0,13000.0}};
 		Number[][] expected = new Number[][] {{2000.0,8000.0},{1000.0,13000.0}};
 		Number[][] actual = DataUtilities.createNumberArray2D(data);
@@ -273,7 +273,7 @@ public class DataUtilitiesTest {
 	
 	
 	@Test
-	public void testCreateNumberArray2DSRectangularMatrix() {
+	public void testCreateNumberArray2DRectangularMatrix() {
 		double[][] data = new double[][] {{2.0,8.0},{10.0,13.0},{15.0,4.0}};
 		Number[][] expected = new Number[][] {{2.0,8.0},{10.0,13.0},{15.0,4.0}};
 		Number[][] actual = DataUtilities.createNumberArray2D(data);
@@ -299,7 +299,7 @@ public class DataUtilitiesTest {
 	//getCumulativePercentages
 	
 	@Test
-	public void TestCumulativePercentagesSingleInput() {
+	public void testCumulativePercentagesSingleInput() {
 		
 		DefaultKeyedValues keyedValues = new DefaultKeyedValues();
 		keyedValues.addValue("A", 5.0);
@@ -314,7 +314,7 @@ public class DataUtilitiesTest {
 	}
 	
 	@Test
-	public void TestCumulativePercentagesMultipleInputs() {
+	public void testCumulativePercentagesMultipleInputs() {
 		
 		DefaultKeyedValues keyedValues = new DefaultKeyedValues();
 		keyedValues.addValue("A", 5.0);
@@ -343,7 +343,7 @@ public class DataUtilitiesTest {
 	
 	
 	@Test
-	public void  TestCumulativePercentagesNegativeInputs() {
+	public void testCumulativePercentagesNegativeInputs() {
 		
 		DefaultKeyedValues keyedValues = new DefaultKeyedValues();
 		keyedValues.addValue("A", -5.0);
@@ -366,7 +366,7 @@ public class DataUtilitiesTest {
 	}
 	
 	@Test
-	public void  TestCumulativePercentagesZeroValueInput() {
+	public void testCumulativePercentagesZeroValueInput() {
 		
 		DefaultKeyedValues keyedValues = new DefaultKeyedValues();
 		keyedValues.addValue("A", 0.0);
@@ -392,7 +392,7 @@ public class DataUtilitiesTest {
 	}
 	
 	@Test
-	public void  TestCumulativePercentagesLargeValueInputs() {
+	public void testCumulativePercentagesLargeValueInputs() {
 		
 		DefaultKeyedValues keyedValues = new DefaultKeyedValues();
 		keyedValues.addValue("A", 10000.0);
@@ -421,7 +421,7 @@ public class DataUtilitiesTest {
 	}
 	
 	@Test
-	public void  TestCumulativePercentagesNullValueInput() {
+	public void testCumulativePercentagesNullValueInput() {
 		try
 		{
 			DataUtilities.getCumulativePercentages(null);
