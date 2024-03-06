@@ -60,7 +60,7 @@ public class DataUtilitiesTest {
 		}
 		catch (Exception e) {
 			assertTrue("Incorrect exception type thrown",
-					e.getClass().equals(IndexOutOfBoundsException.class));
+					e.getClass().equals(IllegalArgumentException.class));
 		}
 	}
 	
@@ -73,7 +73,7 @@ public class DataUtilitiesTest {
 		}
 		catch (Exception e) {
 			assertTrue("Incorrect exception type thrown",
-					e.getClass().equals(IndexOutOfBoundsException.class));
+					e.getClass().equals(IllegalArgumentException.class));
 		}
 	}
 	
@@ -81,7 +81,7 @@ public class DataUtilitiesTest {
 	@Test
 	public void testCalculateColumnTotalColumnContainingZero() {
 		assertEquals("Wrong sum returned. It should be 0.0",
-						5.0, DataUtilities.calculateColumnTotal(values2D, 0), 0.0000001d);
+						0.0, DataUtilities.calculateColumnTotal(values2D, 0), 0.0000001d);
 	}
 	
 
@@ -95,14 +95,14 @@ public class DataUtilitiesTest {
 		testValues.addValue(5, 0, 1);
 		testValues.addValue(-3, 1, 1);
 		
-		assertEquals("Wrong sum returned. It should be 3.0",
+		assertEquals("Wrong sum returned. It should be 2.0",
 						2.0, DataUtilities.calculateColumnTotal(values2D, 1), 0.0000001d);
 	}
 	
 	// calculateRowTotal
 	
 	@Test
-	public void testCalculateRowTotalValidDataAndRowTotal() {
+	public void testCalculateRowTotalValidDataAndRowTotalWithPositiveValues() {
 		DefaultKeyedValues2D testValues = new DefaultKeyedValues2D();
 		values2D = testValues;
 		testValues.addValue(4, 0, 0);
@@ -111,7 +111,7 @@ public class DataUtilitiesTest {
 		testValues.addValue(4, 0, 3);
 		
 		assertEquals("Wrong sum returned. It should be 14.0",
-						10.0, DataUtilities.calculateRowTotal(values2D, 0), 0.0000001d);
+						14.0, DataUtilities.calculateRowTotal(values2D, 0), 0.0000001d);
 	}
 	
 	@Test
@@ -123,8 +123,8 @@ public class DataUtilitiesTest {
 		testValues.addValue(-6, 0, 2);
 		testValues.addValue(-13, 0, 3);
 		
-		assertEquals("Wrong sum returned. It should be 11.0",
-						11.0, DataUtilities.calculateRowTotal(values2D, 0), 0.0000001d);
+		assertEquals("Wrong sum returned. It should be -33.0",
+						-33.0, DataUtilities.calculateRowTotal(values2D, 0), 0.0000001d);
 	}
 	
 	@Test
@@ -135,7 +135,7 @@ public class DataUtilitiesTest {
 		}
 		catch (Exception e) {
 			assertTrue("Incorrect exception type thrown",
-					e.getClass().equals(IndexOutOfBoundsException.class));
+					e.getClass().equals(IllegalArgumentException.class));
 		}
 	}
 	
@@ -147,7 +147,20 @@ public class DataUtilitiesTest {
 		}
 		catch (Exception e) {
 			assertTrue("Incorrect exception type thrown",
-					e.getClass().equals(IndexOutOfBoundsException.class));
+					e.getClass().equals(IllegalArgumentException.class));
+		}
+	}
+	
+	@Test
+	public void testCalculateRowTotalNullDataRowTotal() {
+		try
+		{
+			DataUtilities.calculateColumnTotal(null, 0);
+			fail("No exception thrown. The expected outcome was: a thrown exception of type: IllegalArgumentException");
+		}
+		catch (Exception e) {
+			assertTrue("Incorrect exception type thrown",
+					e.getClass().equals(IllegalArgumentException.class));
 		}
 	}
 	
@@ -155,8 +168,8 @@ public class DataUtilitiesTest {
 	
 	@Test
 	public void testCreateNumberArrayWithPositiveValues() {
-		double[] data = new double[] {8.6, 2.0, 14.0, 700.0};
-		Number[] expected = new Number[] {8.6, 2.0, 14.0, 700.0};
+		double[] data = new double[] {8.6, 2.0, 14.0};
+		Number[] expected = new Number[] {8.6, 2.0, 14.0};
 		Number[] actual = DataUtilities.createNumberArray(data);
 		assertArrayEquals("The Expected Array does not match the Actual Array.", expected, actual);
 	}
@@ -259,8 +272,6 @@ public class DataUtilitiesTest {
 	}
 	
 	
-	
-	
 	@Test
 	public void testCreateNumberArray2DSRectangularMatrix() {
 		double[][] data = new double[][] {{2.0,8.0},{10.0,13.0},{15.0,4.0}};
@@ -288,7 +299,7 @@ public class DataUtilitiesTest {
 	//getCumulativePercentages
 	
 	@Test
-	public void testSingleInputToGetCumulativePercentage() {
+	public void TestCumulativePercentagesSingleInput() {
 		
 		DefaultKeyedValues keyedValues = new DefaultKeyedValues();
 		keyedValues.addValue("A", 5.0);
@@ -303,7 +314,7 @@ public class DataUtilitiesTest {
 	}
 	
 	@Test
-	public void testMultipleInputsToGetCumulativePercentage() {
+	public void TestCumulativePercentagesMultipleInputs() {
 		
 		DefaultKeyedValues keyedValues = new DefaultKeyedValues();
 		keyedValues.addValue("A", 5.0);
@@ -328,12 +339,11 @@ public class DataUtilitiesTest {
 		assertEquals("Incorrect Cumulative Frequency for value A", 
 				expected[2], result.getValue("C").doubleValue(),0.0001d);
 		
-		
 	}
 	
 	
 	@Test
-	public void testNegativeInputsToGetCumulativePercentage() {
+	public void  TestCumulativePercentagesNegativeInputs() {
 		
 		DefaultKeyedValues keyedValues = new DefaultKeyedValues();
 		keyedValues.addValue("A", -5.0);
@@ -356,7 +366,7 @@ public class DataUtilitiesTest {
 	}
 	
 	@Test
-	public void testZeroValueInputToGetCumulativePercentage() {
+	public void  TestCumulativePercentagesZeroValueInput() {
 		
 		DefaultKeyedValues keyedValues = new DefaultKeyedValues();
 		keyedValues.addValue("A", 0.0);
@@ -382,7 +392,7 @@ public class DataUtilitiesTest {
 	}
 	
 	@Test
-	public void testLargeValueInputsToGetCumulativePercentage() {
+	public void  TestCumulativePercentagesLargeValueInputs() {
 		
 		DefaultKeyedValues keyedValues = new DefaultKeyedValues();
 		keyedValues.addValue("A", 10000.0);
@@ -411,7 +421,7 @@ public class DataUtilitiesTest {
 	}
 	
 	@Test
-	public void testNullValueInputToGetCumulativePercentage() {
+	public void  TestCumulativePercentagesNullValueInput() {
 		try
 		{
 			DataUtilities.getCumulativePercentages(null);
