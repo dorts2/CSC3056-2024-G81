@@ -152,7 +152,7 @@ public class DataUtilitiesTest {
 	}
 	
 	@Test
-	public void testCalculateRowTotalNullDataRowTotal() {
+	public void testCalculateRowTotalNullData() {
 		try
 		{
 			DataUtilities.calculateColumnTotal(null, 0);
@@ -168,8 +168,8 @@ public class DataUtilitiesTest {
 	
 	@Test
 	public void testCreateNumberArrayWithPositiveValues() {
-		double[] data = new double[] {8.6, 2.0, 14.0};
-		Number[] expected = new Number[] {8.6, 2.0, 14.0};
+		double[] data = new double[] {8.6, 2.0, 14.0, 700.0};
+		Number[] expected = new Number[] {8.6, 2.0, 14.0, 700.0};
 		Number[] actual = DataUtilities.createNumberArray(data);
 		assertArrayEquals("The Expected Array does not match the Actual Array.", expected, actual);
 	}
@@ -286,7 +286,7 @@ public class DataUtilitiesTest {
 	
 	@Test
 	public void testCreateNumberArray2DSquareMatrix() {
-		double[][] data = new double[][] {{2.0,8.0,7.0},{10.0,13.0}};
+		double[][] data = new double[][] {{2.0,8.0},{10.0,13.0}};
 		Number[][] expected = new Number[][] {{2.0,8.0},{10.0,13.0}};
 		Number[][] actual = DataUtilities.createNumberArray2D(data);
 		assertEquals("The Expected Array does not match the Actual Array.", expected.length, actual.length);
