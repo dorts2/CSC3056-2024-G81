@@ -99,6 +99,19 @@ public class DataUtilitiesTest {
 						2.0, DataUtilities.calculateColumnTotal(values2D, 1), 0.0000001d);
 	}
 	
+	@Test
+	public void testCalculateColumnTotalWithBothNullAndNonNullValues() {
+	    DefaultKeyedValues2D testValues = new DefaultKeyedValues2D();
+	    values2D = testValues;
+	    testValues.addValue(null, 0, 0);
+	    testValues.addValue(8.7, 1, 0);
+	    testValues.addValue(null, 2, 0);
+
+	    assertEquals("Incorrect sum. Expected sum for column with null and non-null values should be 8.7",
+	                 8.7, DataUtilities.calculateColumnTotal(values2D, 0), 0.0000001d);
+	}
+
+	
 	// calculateRowTotal
 	
 	@Test
@@ -163,6 +176,20 @@ public class DataUtilitiesTest {
 					e.getClass().equals(IllegalArgumentException.class));
 		}
 	}
+	
+	@Test
+	public void testCalculateRowTotalWithBothNullAndNonNullValues() {
+	    DefaultKeyedValues2D testValues = new DefaultKeyedValues2D();
+	    values2D = testValues;
+	    testValues.addValue(null, 0, 0);
+	    testValues.addValue(11.2, 0, 1);
+	    testValues.addValue(null, 0, 2);
+	    testValues.addValue(2.6, 0, 3);
+
+	    assertEquals("Incorrect sum. Expected sum for row with null and non-null values should be 13.8",
+	                 13.8, DataUtilities.calculateRowTotal(values2D, 0), 0.0000001d);
+	}
+
 	
 	// createNumberArray
 	
@@ -432,6 +459,33 @@ public class DataUtilitiesTest {
 					e.getClass().equals(IllegalArgumentException.class));
 		}
 	}
+	
+	@Test
+	public void testCumulativePercentagesWithBothNullAndNonNullValues() {
+	    DefaultKeyedValues keyedValues = new DefaultKeyedValues();
+	    keyedValues.addValue("A", null);
+	    keyedValues.addValue("B", 22.2);
+	    keyedValues.addValue("C", null);
+	    keyedValues.addValue("D", 33.3);
+	    keyedValues.addValue("E", 44.4);
+
+	    KeyedValues result = DataUtilities.getCumulativePercentages(keyedValues);
+
+	    double sum = 22.2 + 33.3 + 44.4;
+
+	    double[] expected = {
+	        (0.0 / sum),
+	        (22.2 / sum),
+	        (22.2 / sum),
+	        ((22.2 + 33.3) / sum),
+	        ((22.2 + 33.3 + 44.4) / sum)
+	    };
+
+	    assertEquals("Incorrect Cumulative Percentage for value B", expected[1], result.getValue("B").doubleValue(), 0.0000001d);
+	    assertEquals("Incorrect Cumulative Percentage for value D", expected[3], result.getValue("D").doubleValue(), 0.0000001d);
+	    assertEquals("Incorrect Cumulative Percentage for value E", expected[4], result.getValue("E").doubleValue(), 0.0000001d);
+	}
+
 	
 	
 	
