@@ -201,7 +201,15 @@ public class RangeTest {
 				3.5, rangeObjectUnderTest.constrain(4.6), 0.0000001d);
 	}
 	
+	//Added to try and trigger missed branch
+	@Test
+	public void testConstrainValueBelowLowerBoundary() {
+	    assertEquals("The closest value to -5.0 in the range (-3.5,3.5) is -3.5",
+	            -3.5, rangeObjectUnderTest.constrain(-5.0), 0.0000001d);
+	}
 	
+	
+
 	// intersects()
 
 	@Test
@@ -246,4 +254,126 @@ public class RangeTest {
 				true, rangeObjectUnderTest.intersects(-3.5, 3.5));
 	}
 	
-}
+	@Test
+	public void testIntersectsBothValuesNegativeAndInsideRangeOnUpperBoundary() {
+	    assertEquals("The range (-3.3, 2.7) does intersect with range (-3.5,3.5)",
+	            true, rangeObjectUnderTest.intersects(-3.3, 2.7));
+	}
+	
+	
+	// getLength
+	
+	@Test
+    public void testGetLengthPositiveBounds() {
+        assertEquals("Length of range (0, 5) should be 5.0", 5.0, rangeObjectUnderTest.getLength(), 0.0000001);
+    }
+	
+	//getCentralValue
+	
+	@Test
+    public void testGetCentralValuePositiveBounds() {
+        assertEquals("Central value of range (0, 5) should be 2.5", 2.5, rangeObjectUnderTest.getCentralValue(), 0.0000001);
+    }
+	
+	//Expand 
+	
+	 @Test
+	    public void testExpandNonNullRange() {
+	        Range expandedRange = Range.expand(rangeObjectUnderTest, 0.1, 0.1);
+	        assertEquals("Expanded range lower bound should be -4.9", -4.9, expandedRange.getLowerBound(), 0.0000001);
+	        assertEquals("Expanded range upper bound should be 4.9", 4.9, expandedRange.getUpperBound(), 0.0000001);
+	    }
+	 
+	 @Test
+	    public void testExpandWithNullRange() {
+	        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+	            Range.expand(null, 0.1, 0.1);
+	        });
+	        assertEquals("Exception message should match", "Null 'range' argument.", exception.getMessage());
+	    }
+	 
+	 //combine
+	 
+	 @Test
+	    public void testCombineBothNonNullRanges() {
+	        Range range1 = new Range(-2.0, 2.0);
+	        Range range2 = new Range(-1.0, 3.0);
+	        Range combinedRange = Range.combine(range1, range2);
+	        assertEquals("Combined range lower bound should be -2.0", -2.0, combinedRange.getLowerBound(), 0.0000001);
+	        assertEquals("Combined range upper bound should be 3.0", 3.0, combinedRange.getUpperBound(), 0.0000001);
+	    }
+
+	    @Test
+	    public void testCombineFirstRangeNull() {
+	        Range range2 = new Range(-1.0, 3.0);
+	        Range combinedRange = Range.combine(null, range2);
+	        assertEquals("Combined range lower bound should be -1.0", -1.0, combinedRange.getLowerBound(), 0.0000001);
+	        assertEquals("Combined range upper bound should be 3.0", 3.0, combinedRange.getUpperBound(), 0.0000001);
+	    }
+
+	   
+	    @Test
+	    public void testCombineBothRangesNull() {
+	        Range combinedRange = Range.combine(null, null);
+	        assertEquals("Combined range should be null", null, combinedRange);
+	    }
+	    
+	    
+	    //hashCode
+	    
+	    @Test
+	    public void testHashCode() {
+	        int expectedHashCode = rangeObjectUnderTest.hashCode();
+	        assertEquals("Hash code should not be zero", 1, expectedHashCode);
+	    }
+	    
+	    //toString
+	    
+	    @Test
+	    public void testToString() {
+	        String expectedToString = "Range[-3.5,3.5]";
+	        String actualToString = rangeObjectUnderTest.toString();
+	        assertEquals("Generated toString representation should match", expectedToString, actualToString);
+	    }
+	    
+	    //range
+	    
+	    @Test
+	    public void testRangeValidBounds() {
+	        assertEquals("Lower bound should be -3.5", -3.5, rangeObjectUnderTest.getLowerBound(), 0.0000001);
+	        assertEquals("Upper bound should be 3.5", 3.5, rangeObjectUnderTest.getUpperBound(), 0.0000001);
+	    }
+
+	    @Test
+	    public void testRangeEqualBounds() {
+	        assertEquals("Lower bound should be 2.0", 2.0, rangeObjectUnderTest.getLowerBound(), 0.0000001);
+	        assertEquals("Upper bound should be 2.0", 2.0, rangeObjectUnderTest.getUpperBound(), 0.0000001);
+	    }
+
+	    @Test
+	    public void testRangeInvalidBounds() {
+	        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+	            new Range(3.0, 2.0);
+	        });
+	        assertEquals("Exception message should match", "Range(double, double): require lower (3.0) <= upper (2.0).", exception.getMessage());
+	    }
+	    
+	    //Shift 
+	    
+	    @Test
+	    public void testShiftAllowZeroCrossingTrue() {
+	        Range shiftedRange = Range.shift(rangeObjectUnderTest, 2.0, true);
+	        assertEquals("Lower bound should be -1.5", -1.5, shiftedRange.getLowerBound(), 0.0000001);
+	        assertEquals("Upper bound should be 5.5", 5.5, shiftedRange.getUpperBound(), 0.0000001);
+	    }
+
+	    @Test
+	    public void testShiftAllowZeroCrossingFalse() {
+	        Range shiftedRange = Range.shift(rangeObjectUnderTest, 2.0, false);
+	        assertEquals("Lower bound should be -1.5", -1.5, shiftedRange.getLowerBound(), 0.0000001);
+	        assertEquals("Upper bound should be 5.5", 5.5, shiftedRange.getUpperBound(), 0.0000001);
+	    }
+
+	   
+	}
+
