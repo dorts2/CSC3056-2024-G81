@@ -318,6 +318,14 @@ public class RangeTest {
 	        assertEquals("Combined range should be null", null, combinedRange);
 	    }
 	    
+	    @Test
+	    public void testCombineWithFirstNotNullAndSecondNull() {
+	        Range range1 = new Range(1.0, 5.0);
+	        Range range2 = null;
+	        Range result = Range.combine(range1, range2);
+	        assertNull("The result should be null when the second range is null", result);
+	    }
+	    
 	    
 	    //hashCode
 	    
